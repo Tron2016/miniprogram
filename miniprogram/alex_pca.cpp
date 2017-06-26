@@ -53,7 +53,7 @@ void ColorPCA(cv::Mat &color)
 			for (int k = 0; k < 3; k++)
 			{
 				float* data2 = val.ptr<float>(k);
-				j = j + k;
+				j = k;
 				float v = data2[0];
 				data1[j] = data1[j]+v;
 			}

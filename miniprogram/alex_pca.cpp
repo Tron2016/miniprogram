@@ -45,21 +45,12 @@ void ColorPCA(cv::Mat &color)
 	Mat val = eigenVectorsT*(noiseD*dv);
 
 
-	for (int i = 0; i < Rows; i++)
-	{
-		uchar * data1 = color.ptr<uchar>(i);
-		for (int j = 0; j < Cols;j++)
-		{
-			int j0 = j;
-			for (int k = 0; k < 3; k++)
-			{
-				float* data2 = val.ptr<float>(k);
-				j = j0 + k;
-				float v = data2[0];
-				data1[j] = data1[j]+v;
-			}
-		}
-	}
+	std::vector<cv::Mat> channels2;
+	cv::split(color, channels2);
+	channels2[0] = channels2[0] + val.at<Vec3f>(0, 0);
+	channels2[1] = channels2[1] + val.at<Vec3f>(1, 0);
+	channels2[2] = channels2[2] + val.at<Vec3f>(2, 0);
+	cv::merge(channels2, color);
 
 }
 

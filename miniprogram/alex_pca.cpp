@@ -30,23 +30,26 @@ void ColorPCA(cv::Mat &color)
 	Mat eigenVectors;
 	Mat diffT;
 	cv::transpose(diff, diffT);
-	Mat cov(diffT*diff/sum/9);
+	Mat cov(diffT*diff/sum);
 	eigen(cov, eigenValues, eigenVectors);
 	Mat dv;
 	cv::sqrt(eigenValues, dv);
 	int Rows = color.rows;
 	int Cols = color.cols*color.channels();
 
-	
+	cv::Mat noise(3, 1, CV_32FC1);
+	cv::randn(noise, 0, 0.01);
+	Mat noiseD = cv::Mat::diag(noise);
+	Mat eigenVectorsT;
+	cv::transpose(eigenVectors, eigenVectorsT);
+	Mat val = eigenVectorsT*(noiseD*dv);
+
+
 	for (int i = 0; i < Rows; i++)
 	{
 		uchar * data1 = color.ptr<uchar>(i);
 		for (int j = 0; j < Cols;j++)
 		{
-			cv::Mat noise(3, 1, CV_32FC1);
-			cv::randn(noise, 0, 0.01);
-			Mat noiseD = cv::Mat::diag(noise);
-			Mat val = eigenVectors*(noiseD*dv);
 			for (int k = 0; k < 3; k++)
 			{
 				float* data2 = val.ptr<float>(k);

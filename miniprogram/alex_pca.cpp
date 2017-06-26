@@ -50,10 +50,11 @@ void ColorPCA(cv::Mat &color)
 		uchar * data1 = color.ptr<uchar>(i);
 		for (int j = 0; j < Cols;j++)
 		{
+			int j0 = j;
 			for (int k = 0; k < 3; k++)
 			{
 				float* data2 = val.ptr<float>(k);
-				j = k;
+				j = j0 + k;
 				float v = data2[0];
 				data1[j] = data1[j]+v;
 			}
